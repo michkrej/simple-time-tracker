@@ -26,13 +26,11 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <StylesProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Router>
           <Route path="/:filter?" component={App} />
         </Router>
       </ThemeProvider>
-    </StylesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

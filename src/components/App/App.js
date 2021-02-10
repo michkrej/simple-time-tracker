@@ -1,21 +1,30 @@
-import './App.css';
-import React from 'react';
-import { Overview } from '../../pages/index'
-import { Route } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Overview, Start } from '../../pages/index'
+import { Route, Switch } from 'react-router-dom'
 import { isMobileDevice } from '../../utils'
 
-function App() {
+import { auth } from '../../firebase/firebase.utils'
+
+function App () {
+  const [currentUser, setUser] = useState(null)
 
   const isMobile = isMobileDevice()
 
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      setUser(user)
+
+      console.log(user)
+    })
+  }, [])
+
   return (
-    <div className="App">
-      <Route exact path='/'>
-        <Overview isMobile={isMobile}/>
-      </Route>
-
+    <div>
+      <Switch>
+        <Route exact path='/' component={Start} />
+        <Route path='/overview' component={Overview} />
+      </Switch>
     </div>
-  );
+  )
 }
-
-export default App;
+export default App
