@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import { Redirect, Route } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 export default class PrivateRoute extends Component {
-
   render() {
-    const { render, ...rest } = this.props;
-
-    console.log(this.props)
-    console.log(this.props.currentUser)
+    const { render, ...rest } = this.props
 
     return (
       <Route
@@ -18,17 +13,19 @@ export default class PrivateRoute extends Component {
             <React.Fragment>
               {render(props)}
             </React.Fragment>
-          ) : !this.props.loading ? ( // Makes sure that login verifications is done before redirect
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: this.props.location }
-              }}
-            />
-          ) : null // Meaning we render nothing while 'logging in'
+          )
+            : !this.props.loading ? ( // Makes sure that login verifications is done before redirect
+              <Redirect
+                to={{
+                  pathname: '/login',
+                  state: { from: this.props.location }
+                }}
+              />
+            )
+              : null // Meaning we render nothing while 'logging in'
         }
       />
 
-    );
+    )
   }
 }

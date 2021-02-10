@@ -2,18 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { Overview, Start } from '../../pages/index'
 import { Route, Switch } from 'react-router-dom'
 
-import { auth } from '../../firebase/firebase.utils'
-import PrivateRoute from '../../utils/PrivateRoute'
-import { ContactsOutlined } from '@material-ui/icons'
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
 
 const useAuthUser = (props) => {
-  const [user, setUser] = useState(null)
+  const [currentUser, setUser] = useState(null)
 
   useEffect(() => {
     // no need for ref here
-    const unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      setUser(user)
-      console.log(user)
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
+
+        userRef.onSnapshot(snapshot => {
+          setUser({
+            id: snapshot.id,
+            ...snapshot.data()
+          })
+        })
+      } else {
+        setUser(userAuth)
+      }
     })
 
     return () => {
@@ -21,31 +29,19 @@ const useAuthUser = (props) => {
     }
   }, [])
 
-  return user // return authenticated user
+  useEffect(() => console.log(currentUser), [currentUser])
+
+  return currentUser // return authenticated user
 }
 
 function App () {
-
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    // no need for ref here
-    const unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      setUser(user)
-    })
-
-    return () => {
-      unsubscribeFromAuth()
-    }
-  }, [])
-
-  console.log(user)
+  const user = useAuthUser()
 
   return (
     <div>
       <Switch>
         <Route path='/login' component={Start} />
-        <PrivateRoute
+        <Route
           path='/overview'
           render={(props) => (
             <Overview currentUser={user} />

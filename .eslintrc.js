@@ -18,5 +18,10 @@ module.exports = {
     'react'
   ],
   rules: {
+    'no-unused-vars': 'warn',
+    'react/prop-types': 'warn',
+    'no-multiple-empty-lines': 'warn',
+    'eol-last': 'warn',
+    'padded-blocks': 'warn'
   }
 }
