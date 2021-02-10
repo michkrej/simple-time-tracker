@@ -5,8 +5,8 @@ import './index.css';
 import { App } from './components/index';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider, StylesProvider } from '@material-ui/core';
-import green from '@material-ui/core/colors/purple';
+import { createMuiTheme, ThemeProvider, StylesProvider} from '@material-ui/core';
+import green from '@material-ui/core/colors/green';
 
 const theme = createMuiTheme({
   palette: {
