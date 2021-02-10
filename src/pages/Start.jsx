@@ -5,7 +5,10 @@ import { signInWithGoogle } from '../firebase/firebase.utils'
 
 const StartPage = () => {
   return (
-    <SignIn signInWithGoogle={signInWithGoogle} />
+    <div>
+      <title>Simple Time Tracker</title>
+      <SignIn signInWithGoogle={signInWithGoogle} />;
+    </div>
   )
 
 }
