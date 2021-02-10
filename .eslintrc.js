@@ -22,6 +22,9 @@ module.exports = {
     'react/prop-types': 'warn',
     'no-multiple-empty-lines': 'warn',
     'eol-last': 'warn',
-    'padded-blocks': 'warn'
+    'padded-blocks': 'warn',
+    quotes: 'warn',
+    semi: 'warn',
+    'space-before-function-paren': 'warn'
   }
 }
