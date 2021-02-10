@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-// import './styles/main.scss'
+
 import { App } from './components/index'
+
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core'
+
 import green from '@material-ui/core/colors/green'
 
 const theme = createMuiTheme({

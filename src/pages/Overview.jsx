@@ -1,3 +1,4 @@
+import React from 'react'
 import { NewActivity } from '../components/index'
 import { Grid } from '@material-ui/core'
 
