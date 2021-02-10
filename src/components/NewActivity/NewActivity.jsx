@@ -1,8 +1,5 @@
-/* import { TextField } from '@rmwc/textfield'
-import { Select } from '@rmwc/select'
-import { Button } from '@rmwc/button' */
-import { useFormik, Formik, Form } from 'formik'
-import { TextField, NativeSelect, Button, withStyles } from '@material-ui/core'
+import { Formik, Form } from 'formik'
+import { TextField, NativeSelect, Button } from '@material-ui/core'
 
 import './NewActivity.scss'
 

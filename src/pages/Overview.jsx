@@ -1,12 +1,12 @@
-import { NewActivity, ActivityTable, Summary } from '../components/index'
-import { Grid, GridCell, GridRow } from '@rmwc/grid'
+import { NewActivity } from '../components/index'
+import { Grid } from '@material-ui/core'
 
 const Overview = (props) => {
   return (
     <Grid>
-      <GridCell desktop='12' tablet='8' phone='4'>
+      <Grid span={12}>
         <NewActivity isMobile={props.isMobile}/>
-      </GridCell>
+      </Grid>
     </Grid>
 
   )
