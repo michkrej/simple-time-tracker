@@ -1,24 +1,61 @@
 import React, { useState, useEffect } from 'react'
 import { Overview, Start } from '../../pages/index'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { useAuthUser } from '../../utils'
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
+import { setCurrentUser } from '../../redux/user/user.actions'
+import { connect } from 'react-redux'
 
-function App () {
-  const user = useAuthUser()
+function App (props) {
+  useEffect(() => {
+    const { setCurrentUser } = props
+    // no need for ref here
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
+
+        userRef.onSnapshot(snapshot => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
+          })
+        })
+      } else {
+        setCurrentUser(userAuth)
+      }
+    })
+
+    return () => {
+      unsubscribeFromAuth()
+    }
+  }, [])
 
   return (
     <div>
       <Switch>
-        <Route path='/login' component={Start} />
         <Route
           path='/overview'
-          render={(props) => (
-            <Overview currentUser={user} />
+          render={() => (
+            <Overview />
           )}
         />
+        <Route exact path='/login' render={
+          () => props.currentUser ? (<Redirect to='/overview' />) : (<Start />)
+        }/>
       </Switch>
     </div>
   )
 }
-export default App
+
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
