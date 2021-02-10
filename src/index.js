@@ -1,12 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+//import './styles/main.scss'
+import { App } from './components/index';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider, StylesProvider } from '@material-ui/core';
+import green from '@material-ui/core/colors/purple';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+    secondary: {
+      main: '#f48fb1',
+    },
+  },
+  props: {
+    // Name of the component ⚛️
+    MuiButtonBase: {
+      // The properties to apply
+      disableRipple: true, // No more ripple, on the whole application 💣!
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StylesProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Route path="/:filter?" component={App} />
+        </Router>
+      </ThemeProvider>
+    </StylesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
