@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import MomentUtils from '@date-io/moment'
 import green from '@material-ui/core/colors/green'
 import { Provider } from 'react-redux'
 
@@ -27,16 +29,15 @@ const theme = createMuiTheme({
 })
 
 ReactDOM.render(
-  <React.StrictMode>
     <Provider store={store}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
       <ThemeProvider theme={theme}>
         <Router>
           <Route path="/:filter?" component={App} />
         </Router>
       </ThemeProvider>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+      </MuiPickersUtilsProvider>
+    </Provider>, document.getElementById('root')
 )
 
 // If you want to start measuring performance in your app, pass a function
