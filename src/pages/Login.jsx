@@ -3,7 +3,7 @@ import { SignIn } from '../components/index'
 
 import { signInWithGoogle } from '../firebase/firebase.utils'
 
-const StartPage = () => {
+const LoginPage = () => {
   return (
     <div>
       <title>Simple Time Tracker</title>
@@ -12,4 +12,4 @@ const StartPage = () => {
   )
 }
 
-export default StartPage
+export default LoginPage

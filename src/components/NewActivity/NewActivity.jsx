@@ -1,88 +1,70 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form } from 'formik'
-import { TextField, Select, Button, Container, Grid, makeStyles, MenuItem, Paper } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import InputBase from '@material-ui/core/InputBase'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import FolderIcon from '@material-ui/icons/Folder'
+import DirectionsIcon from '@material-ui/icons/Directions'
+import { Select, MenuItem, InputLabel, FormControl, TextField } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    padding: theme.spacing(0, 2, 2),
+  root: {
+    padding: '2px 4px',
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%',
+    minHeight: '50px'
   },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 2
   },
-  submit: {
-    margin: theme.spacing(1, 2, 2)
+  iconButton: {
+    padding: 10
+  },
+  divider: {
+    height: 28,
+    margin: 4
   },
   select: {
-    margin: theme.spacing(2, 0, 2),
-    minWidth: '8rem'
-  },
-  activity: {
-
+    // width: '10rem'
   }
 }))
 
 const NewActivity = (props) => {
   const classes = useStyles()
-  const options = ['', 'TDDD96', 'TDDD60', 'TSRT12']
+  const options = ['None', 'TDDD96', 'TDDD60', 'TSRT12']
+  const [project, setPoject] = useState(options[1])
+
+  const handleChange = (e) => {
+    setPoject(e.target.value)
+  }
 
   return (
-    <Container>
-      <Paper elevation={3} className={classes.paper}>
-        <Grid container wrap='wrap'>
-          <Formik
-            initialValues={{
-              activity: '',
-              project: '',
-              time: '00:00'
-            }}
-            onSubmit={(values) => {
-              alert(JSON.stringify(values, null, 2))
-            }}
-          >
-            {({ values, handleChange }) =>
-              <Form className={classes.form}>
-                <Grid item flexGrow={1}>
-                  <TextField
-                    label='Activity'
-                    name='activity'
-                    className={classes.activity}
-                    value={values.activity}
-                    onChange={handleChange}
-                    style={{ flexGrow: 1 }}
-                  />
-                  {/*                 <TextField
-                  label='Time'
-                  type='time'
-                  name='time'
-                  value={values.time}
-                  onChange={handleChange}
-                />
-                <Select
-                  displayEmpty
-                  label='Project'
-                  name='project'
-                  value={values.project}
-                  onChange={handleChange}
-                  className={classes.select}
-                >
-                  {options.map((option) => {
-                    return (<MenuItem id={option} name={option} value={option} key={option}>{option}</MenuItem>)
-                  })}
-                </Select>
-                <Button variant='contained' type='submit' color='primary' className={classes.submit}>
-                  Add
-                </Button> */}
-                </Grid>
-              </Form>}
-          </Formik>
-        </Grid>
-      </Paper>
-    </Container>
+    <Paper component="form" className={classes.root}>
+      <InputBase
+        className={classes.input}
+        placeholder="What have you been up to?"
+        inputProps={{ 'aria-label': 'activity input' }}
+      />
+      <FormControl>
+        <Select
+          placeholder="Project"
+          className={classes.select}
+          disableUnderline
+          value={project}
+          onChange={handleChange}
+          defaultValue={options[0]}
+        >
+          {options.map(option => {
+            return (<MenuItem id={option} key={option} value={option}>{option}</MenuItem>)
+          })}
+        </Select>
+      </FormControl>
+    </Paper>
   )
 }
 
