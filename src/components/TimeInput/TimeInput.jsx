@@ -1,15 +1,32 @@
 import React, { useState } from 'react'
 import { KeyboardDateTimePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt'
+import { findByLabelText } from '@testing-library/react'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  },
+  timeInput: {
+    margin: theme.spacing(1),
+    '& .MuiInputBase-root': {
+      padding: 0,
+      '& .MuiButtonBase-root': {
+        padding: theme.spacing(0, 1, 0, 0)
+      },
+      '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 0, 1, 1)
+      }
+    }
+  },
   startDate: {
-    width: '10.9rem',
-    margin: theme.spacing(1)
+    width: '8.7rem'
   },
   endDate: {
-    width: '7.75rem',
-    margin: theme.spacing(1)
+    width: '5.5rem'
   }
 }))
 
@@ -27,7 +44,7 @@ const TimeInput = () => {
   }
 
   return (
-    <div>
+    <div className={classes.root}>
     <KeyboardDateTimePicker
       autoOk
       ampm={false}
@@ -35,11 +52,12 @@ const TimeInput = () => {
       value={startDate}
       onChange={handleStartDateChange}
       inputVariant='outlined'
-      variant="dialog"
+      variant='dialog'
       showTodayButton
       format={isToday(startDate) ? 'HH:mm [Today]' : 'HH:mm  MM/DD'}
-      className={classes.startDate}
+      className={`${classes.startDate} ${classes.timeInput}`}
     />
+    <ArrowRightAltIcon/>
     <KeyboardDateTimePicker
       autoOk
       ampm={false}
@@ -47,10 +65,10 @@ const TimeInput = () => {
       value={endDate}
       onChange={handleEndDateChange}
       inputVariant='outlined'
-      variant="dialog"
+      variant='dialog'
       showTodayButton
       format={'HH:mm'}
-      className={classes.endDate}
+      className={`${classes.endDate} ${classes.timeInput}`}
     />
     </div>
   )
