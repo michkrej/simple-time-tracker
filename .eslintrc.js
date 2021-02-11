@@ -24,7 +24,9 @@ module.exports = {
     'eol-last': 'warn',
     'padded-blocks': 'warn',
     quotes: 'warn',
-    semi: 'warn',
-    'space-before-function-paren': 'warn'
+    semi: 0,
+    'comma-dangle': 'warn',
+    'space-before-function-paren': 'warn',
+    'no-trailing-spaces': 'warn'
   }
 }

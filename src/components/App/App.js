@@ -5,6 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { connect } from 'react-redux'
+import { CssBaseline } from '@material-ui/core'
 
 function App (props) {
   useEffect(() => {
@@ -31,7 +32,8 @@ function App (props) {
   }, [])
 
   return (
-    <div>
+    <>
+      <CssBaseline />
       <Switch>
         <Route
           path='/overview'
@@ -43,7 +45,7 @@ function App (props) {
           () => props.currentUser ? (<Redirect to='/overview' />) : (<Login/>)
         }/>
       </Switch>
-    </div>
+    </>
   )
 }
 

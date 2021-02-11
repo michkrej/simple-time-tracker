@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     alignItems: 'center',
     width: '100%',
-    minHeight: '50px'
+    minHeight: '50px',
+    marginTop: theme.spacing(2)
   },
   input: {
     marginLeft: theme.spacing(1),
