@@ -1,13 +1,14 @@
 import React from 'react'
-import { SignIn } from '../components/index'
+import { Footer, SignIn } from '../components/index'
 
 import { signInWithGoogle } from '../firebase/firebase.utils'
+import { containerStyle } from './contants'
 
 const LoginPage = () => {
   return (
-    <div>
-      <title>Simple Time Tracker</title>
+    <div className={containerStyle().root}>
       <SignIn signInWithGoogle={signInWithGoogle} />
+      <Footer />
     </div>
   )
 }

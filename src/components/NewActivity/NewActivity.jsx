@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   timePicker: {
     width: '10.8rem'
+  },
+  select: {
+    padding: theme.spacing(1)
   }
 }))
 
@@ -75,6 +78,7 @@ const NewActivity = (props) => {
           value={project}
           onChange={handleChange}
           defaultValue={options[0]}
+          className={classes.select}
         >
           {options.map(option => {
             return (<MenuItem id={option} key={option} value={option}>{option}</MenuItem>)

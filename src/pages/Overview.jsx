@@ -1,27 +1,19 @@
 import React from 'react'
-import { NewActivity, Footer } from '../components/index'
-import { Container, CssBaseline, makeStyles } from '@material-ui/core'
+import { NewActivity, Footer, LogoutButton } from '../components/index'
+import { Container, makeStyles } from '@material-ui/core'
+import { containerStyle } from './contants';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    margin: 0
-  }
-}));
-
-const Overview = (props) => {
-  const classes = useStyles()
+const OverviewPage = (props) => {
+  const classes = containerStyle()
   return (
     <div className={classes.root}>
       <Container >
-        <title>Overview</title>
         <NewActivity />
       </Container>
+      <LogoutButton />
       <Footer />
     </div>
   )
 }
 
-export default Overview
+export default OverviewPage

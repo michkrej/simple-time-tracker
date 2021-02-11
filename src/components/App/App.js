@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Overview, Login } from '../../pages/index'
+import { Overview, Login, Start } from '../../pages/index'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
@@ -33,14 +33,11 @@ function App (props) {
 
   return (
     <>
-      <CssBaseline />
+      <title>Simple Time Tracker</title>
+      <CssBaseline/>
       <Switch>
-        <Route
-          path='/overview'
-          render={() => (
-            <Overview />
-          )}
-        />
+        <Route exact path='/' component={Start}/>
+        <Route path='/overview' component={Overview}/>
         <Route exact path='/login' render={
           () => props.currentUser ? (<Redirect to='/overview' />) : (<Login/>)
         }/>
