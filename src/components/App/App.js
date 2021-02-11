@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Overview, Start } from '../../pages/index'
+import { Overview, Login } from '../../pages/index'
 import { Route, Switch } from 'react-router-dom'
 
 import { useAuthUser } from '../../utils'
@@ -10,7 +10,7 @@ function App () {
   return (
     <div>
       <Switch>
-        <Route path='/login' component={Start} />
+        <Route path='/login' component={Login} />
         <Route
           path='/overview'
           render={(props) => (
