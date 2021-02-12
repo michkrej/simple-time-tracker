@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import { signOut } from '../../firebase/firebase.utils'
+
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
@@ -18,12 +20,14 @@ const LogoutButton = () => {
 
   const isStartPage = window.location.pathname === '/'
 
-  console.log(isStartPage)
+  const handleClick = () => {
+    if (!isStartPage) signOut()
+  }
 
   return (
     <>
       <Link to={isStartPage ? '/login' : '/'}>
-        <Fab className={classes.fab} color="secondary" >
+        <Fab className={classes.fab} color="secondary" onClick={() => handleClick()}>
           <ExitToAppIcon />
         </Fab>
       </Link>
