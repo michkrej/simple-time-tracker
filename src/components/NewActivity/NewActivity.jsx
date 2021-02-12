@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
-    minWidth: '10rem'
+    minWidth: '8rem'
   },
   iconButton: {
     padding: 10
@@ -63,7 +63,7 @@ const NewActivity = (props) => {
     <Paper component="form" className={classes.root}>
       <InputBase
         className={classes.input}
-        placeholder="What have you been up to?"
+        placeholder="What are you doing?"
         inputProps={{ 'aria-label': 'activity input' }}
         required
         autoFocus

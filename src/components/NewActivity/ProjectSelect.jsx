@@ -19,10 +19,8 @@ const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setV
     }, 500)
   }
 
-  console.log(isLoading, options, value)
-
   return (
-    <div style={{ minWidth: '10rem' }}>
+    <div style={{ minWidth: '10rem', padding: MuiTheme.spacing(1) }}>
       <CreatableSelect
         isClearable
         isDisabled={isLoading}
