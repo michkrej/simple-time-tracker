@@ -5,12 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import FolderIcon from '@material-ui/icons/Folder'
-import DirectionsIcon from '@material-ui/icons/Directions'
-import { Select, MenuItem, InputLabel, FormControl, TextField } from '@material-ui/core'
-import { KeyboardDateTimePicker } from '@material-ui/pickers'
-import moment from 'moment'
+import DoneIcon from '@material-ui/icons/Done';
 
 import { TimeInput, ProjectSelect } from '../index'
 
@@ -47,20 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 const NewActivity = (props) => {
   const classes = useStyles()
-  const options = ['None', 'TDDD96', 'TDDD60', 'TSRT12']
-  const [project, setPoject] = useState(options[1])
-
-  const handleChange = (e) => {
-    setPoject(e.target.value)
-  }
-
-  const isToday = (date) => {
-    const currentDate = new Date()
-    if (date._isAMomentObject) {
-      return date._d.getDate() === currentDate.getDate() && date._d.getMonth() === currentDate.getMonth()
-    }
-    return date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth()
-  }
 
   return (
     <Paper component="form" className={classes.root}>
@@ -69,22 +50,11 @@ const NewActivity = (props) => {
         placeholder="What have you been up to?"
         inputProps={{ 'aria-label': 'activity input' }}
       />
-      {/* <FormControl>
-        <Select
-          placeholder="Project"
-          disableUnderline
-          value={project}
-          onChange={handleChange}
-          defaultValue={options[0]}
-          className={classes.select}
-        >
-          {options.map(option => {
-            return (<MenuItem id={option} key={option} value={option}>{option}</MenuItem>)
-          })}
-        </Select>
-      </FormControl> */}
       <ProjectSelect className={classes.select} />
       <TimeInput/>
+      <IconButton color='secondary' type='submit'>
+        <DoneIcon />
+      </IconButton>
     </Paper>
   )
 }
