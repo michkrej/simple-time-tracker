@@ -47,7 +47,7 @@ export const signInWithGoogle = () => auth.signInWithPopup(provider)
 export const signOut = () => auth.signOut().then(() => {
   console.log('Signed out')
 }).catch((error) => {
-  console.log('Error', error)
+  console.log(error)
 })
 
 export default firebase
