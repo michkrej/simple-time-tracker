@@ -50,7 +50,7 @@ const defaultOptions = [
   createOption('TSRT12')
 ]
 
-const NewActivity = (props) => {
+const NewActivity = () => {
   const classes = useStyles()
 
   const [startDate, handleStartDateChange] = useState(new Date())

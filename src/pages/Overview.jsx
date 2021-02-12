@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewActivity, Footer, LogoutButton } from '../components/index'
+import { NewActivity, Footer, LogoutButton, ActivityTable } from '../components/index'
 import { Container, makeStyles } from '@material-ui/core'
 import { containerStyle } from './contants';
 
@@ -9,6 +9,7 @@ const OverviewPage = (props) => {
     <div className={classes.root}>
       <Container >
         <NewActivity />
+        <ActivityTable />
       </Container>
       <LogoutButton />
       <Footer />
