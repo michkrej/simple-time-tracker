@@ -12,7 +12,7 @@ import { Select, MenuItem, InputLabel, FormControl, TextField } from '@material-
 import { KeyboardDateTimePicker } from '@material-ui/pickers'
 import moment from 'moment'
 
-import { TimeInput } from '../index'
+import { TimeInput, ProjectSelect } from '../index'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
     width: '10.8rem'
   },
   select: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
+    minWidth: '10rem'
   }
 }))
 
@@ -48,7 +49,6 @@ const NewActivity = (props) => {
   const classes = useStyles()
   const options = ['None', 'TDDD96', 'TDDD60', 'TSRT12']
   const [project, setPoject] = useState(options[1])
-  const [selectedDate, handleDateChange] = useState(new Date())
 
   const handleChange = (e) => {
     setPoject(e.target.value)
@@ -62,8 +62,6 @@ const NewActivity = (props) => {
     return date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth()
   }
 
-  isToday(selectedDate)
-
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
@@ -71,7 +69,7 @@ const NewActivity = (props) => {
         placeholder="What have you been up to?"
         inputProps={{ 'aria-label': 'activity input' }}
       />
-      <FormControl>
+      {/* <FormControl>
         <Select
           placeholder="Project"
           disableUnderline
@@ -84,7 +82,8 @@ const NewActivity = (props) => {
             return (<MenuItem id={option} key={option} value={option}>{option}</MenuItem>)
           })}
         </Select>
-      </FormControl>
+      </FormControl> */}
+      <ProjectSelect className={classes.select} />
       <TimeInput/>
     </Paper>
   )

@@ -15,18 +15,18 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiInputBase-root': {
       padding: 0,
       '& .MuiButtonBase-root': {
-        padding: theme.spacing(0, 1, 0, 0)
+        padding: theme.spacing(0, 1.2, 0, 0)
       },
       '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 0, 1, 1)
+        padding: theme.spacing(1.2, 0, 1.2, 1.2)
       }
     }
   },
   startDate: {
-    width: '8.7rem'
+    width: '8.8rem'
   },
   endDate: {
-    width: '5.5rem'
+    width: '5.8rem'
   }
 }))
 

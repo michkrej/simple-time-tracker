@@ -12,7 +12,7 @@ import { App } from './components/index'
 
 import store from './redux/store'
 
-const theme = createMuiTheme({
+export const theme = createMuiTheme({
   palette: {
     primary: green,
     secondary: {
