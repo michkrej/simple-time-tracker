@@ -1,23 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 import { theme as MuiTheme } from '../../index'
+import { createOption } from './NewActivity'
 
-const createOption = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, '')
-})
-
-const defaultOptions = [
-  createOption('TDDD96'),
-  createOption('TDDD60'),
-  createOption('TSRT12')
-]
-
-const ProjectSelect = () => {
-  const [isLoading, setLoading] = useState(false)
-  const [options, setOptions] = useState(defaultOptions)
-  const [value, setValue] = useState(undefined)
-
+const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setValue }) => {
   const handleChange = (newValue) => {
     setValue(newValue)
   }
@@ -31,6 +18,8 @@ const ProjectSelect = () => {
       setValue(newOption)
     }, 500)
   }
+
+  console.log(isLoading, options, value)
 
   return (
     <div style={{ minWidth: '10rem' }}>

@@ -3,7 +3,6 @@ import { Formik, Form } from 'formik'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
-import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import DoneIcon from '@material-ui/icons/Done';
 
@@ -40,8 +39,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+export const createOption = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, '')
+})
+
+const defaultOptions = [
+  createOption('TDDD96'),
+  createOption('TDDD60'),
+  createOption('TSRT12')
+]
+
 const NewActivity = (props) => {
   const classes = useStyles()
+
+  const [startDate, handleStartDateChange] = useState(new Date())
+  const [endDate, handleEndDateChange] = useState(new Date())
+  const [isLoading, setLoading] = useState(false)
+  const [options, setOptions] = useState(defaultOptions)
+  const [value, setValue] = useState(undefined)
 
   return (
     <Paper component="form" className={classes.root}>
@@ -49,9 +65,24 @@ const NewActivity = (props) => {
         className={classes.input}
         placeholder="What have you been up to?"
         inputProps={{ 'aria-label': 'activity input' }}
+        required
+        autoFocus
       />
-      <ProjectSelect className={classes.select} />
-      <TimeInput/>
+      <ProjectSelect
+        className={classes.select}
+        isLoading={isLoading}
+        setLoading={setLoading}
+        options={options}
+        setOptions={setOptions}
+        value={value}
+        setValue={setValue}
+      />
+      <TimeInput
+        startDate={startDate}
+        handleStartDateChange={handleStartDateChange}
+        endDate={endDate}
+        handleEndDateChange={handleEndDateChange}
+      />
       <IconButton color='secondary' type='submit'>
         <DoneIcon />
       </IconButton>

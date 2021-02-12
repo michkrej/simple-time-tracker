@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
+
 import { KeyboardDateTimePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt'
-import { findByLabelText } from '@testing-library/react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,10 +31,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const TimeInput = () => {
+const TimeInput = ({ startDate, handleStartDateChange, endDate, handleEndDateChange }) => {
   const classes = useStyles()
-  const [startDate, handleStartDateChange] = useState(new Date())
-  const [endDate, handleEndDateChange] = useState(new Date())
 
   const isToday = (date) => {
     const currentDate = new Date()
@@ -72,6 +71,13 @@ const TimeInput = () => {
     />
     </div>
   )
+}
+
+TimeInput.propTypes = {
+  startDate: PropTypes.instanceOf(Date).isRequired,
+  endDate: PropTypes.instanceOf(Date).isRequired,
+  handleStartDateChange: PropTypes.func.isRequired,
+  handleEndDateChange: PropTypes.func.isRequired
 }
 
 export default TimeInput
