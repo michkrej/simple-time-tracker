@@ -6,7 +6,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '90vh',
     width: '100%',
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   paper: {
     display: 'flex',
