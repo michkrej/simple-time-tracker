@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Formik, Form } from 'formik'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import InputBase from '@material-ui/core/InputBase'
@@ -7,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import DoneIcon from '@material-ui/icons/Done';
 
 import { TimeInput, ProjectSelect } from '../index'
+
+import { firestore } from '../../firebase/firebase.utils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
-    minWidth: '8rem'
+    minWidth: '8.66rem'
   },
   iconButton: {
     padding: 10
@@ -53,17 +54,34 @@ const defaultOptions = [
 const NewActivity = () => {
   const classes = useStyles()
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const test = project.value
+    const newActivity = { activity, test, startDate, endDate }
+    alert(JSON.stringify(newActivity, null, 2))
+
+    firestore.collection('activities').add({
+      activity: activity,
+      project: project.value,
+      startDate: startDate,
+      endDate: endDate
+    })
+  }
+
+  const [activity, setActivity] = useState('')
   const [startDate, handleStartDateChange] = useState(new Date())
   const [endDate, handleEndDateChange] = useState(new Date())
   const [isLoading, setLoading] = useState(false)
   const [options, setOptions] = useState(defaultOptions)
-  const [value, setValue] = useState(undefined)
+  const [project, setProject] = useState(undefined)
 
   return (
-    <Paper component="form" className={classes.root}>
+    <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
       <InputBase
         className={classes.input}
         placeholder="What are you doing?"
+        value={activity}
+        onChange={e => setActivity(e.target.value)}
         inputProps={{ 'aria-label': 'activity input' }}
         required
         autoFocus
@@ -74,8 +92,8 @@ const NewActivity = () => {
         setLoading={setLoading}
         options={options}
         setOptions={setOptions}
-        value={value}
-        setValue={setValue}
+        value={project}
+        setValue={setProject}
       />
       <TimeInput
         startDate={startDate}
