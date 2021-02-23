@@ -9,6 +9,7 @@ import { CssBaseline } from '@material-ui/core'
 
 function App (props) {
   useEffect(() => {
+    const { setCurrentUser } = props
     // no need for ref here
     const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
