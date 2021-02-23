@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { KeyboardDateTimePicker } from '@material-ui/pickers'
+import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt'
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const TimeInput = ({ startDate, handleStartDateChange, endDate, handleEndDateChange }) => {
+const TimeInput = ({ startDate, setFieldValue, endDate }) => {
   const classes = useStyles()
 
   const isToday = (date) => {
@@ -44,31 +44,29 @@ const TimeInput = ({ startDate, handleStartDateChange, endDate, handleEndDateCha
 
   return (
     <div className={classes.root}>
-    <KeyboardDateTimePicker
-      autoOk
-      ampm={false}
-      allowKeyboardControl={true}
-      value={startDate}
-      onChange={handleStartDateChange}
-      inputVariant='outlined'
-      variant='dialog'
-      showTodayButton
-      format={isToday(startDate) ? 'HH:mm [Today]' : 'HH:mm  MM/DD'}
-      className={`${classes.startDate} ${classes.timeInput}`}
-    />
-    <ArrowRightAltIcon/>
-    <KeyboardDateTimePicker
-      autoOk
-      ampm={false}
-      allowKeyboardControl={true}
-      value={endDate}
-      onChange={handleEndDateChange}
-      inputVariant='outlined'
-      variant='dialog'
-      showTodayButton
-      format={'HH:mm'}
-      className={`${classes.endDate} ${classes.timeInput}`}
-    />
+      <KeyboardDateTimePicker
+        id='startDate'
+        ampm={false}
+        allowKeyboardControl={true}
+        value={startDate}
+        inputVariant='outlined'
+        variant='dialog'
+        showTodayButton
+        format={isToday(startDate) ? 'HH:mm [Today]' : 'HH:mm  MM/DD'}
+        className={`${classes.startDate} ${classes.timeInput}`}
+        onChange={value => setFieldValue('startDate', value ? value.toDate() : '')}
+      />
+      <ArrowRightAltIcon />
+      <KeyboardTimePicker
+        id='endDate'
+        ampm={false}
+        value={endDate}
+        placeholder={'00:00'}
+        onChange={value => setFieldValue('endDate', value ? value.toDate() : '') }
+        inputVariant='outlined'
+        showTodayButton
+        className={`${classes.endDate} ${classes.timeInput}`}
+      />
     </div>
   )
 }
@@ -76,8 +74,6 @@ const TimeInput = ({ startDate, handleStartDateChange, endDate, handleEndDateCha
 TimeInput.propTypes = {
   startDate: PropTypes.instanceOf(Date).isRequired,
   endDate: PropTypes.instanceOf(Date).isRequired,
-  handleStartDateChange: PropTypes.func.isRequired,
-  handleEndDateChange: PropTypes.func.isRequired
 }
 
 export default TimeInput

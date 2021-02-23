@@ -4,18 +4,14 @@ import CreatableSelect from 'react-select/creatable';
 import { theme as MuiTheme } from '../../index'
 import { createOption } from './NewActivity'
 
-const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setValue }) => {
-  const handleChange = (newValue) => {
-    setValue(newValue)
-  }
-
+const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setFieldValue }) => {
   const handleCreate = (inputValue) => {
     setLoading(true)
     setTimeout(() => {
       const newOption = createOption(inputValue)
       setLoading(false)
       setOptions([...options, newOption])
-      setValue(newOption)
+      setFieldValue('project', newOption)
     }, 500)
   }
 
@@ -25,7 +21,7 @@ const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setV
         isClearable
         isDisabled={isLoading}
         isLoading={isLoading}
-        onChange={handleChange}
+        onChange={value => setFieldValue('project', value)}
         onCreateOption={handleCreate}
         options={options}
         value={value}

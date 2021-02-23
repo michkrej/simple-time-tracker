@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import InputBase from '@material-ui/core/InputBase'
+import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
 import DoneIcon from '@material-ui/icons/Done';
-
+import { useFormik } from 'formik'
 import { TimeInput, ProjectSelect } from '../index'
+import * as yup from 'yup';
 
 import { firestore } from '../../firebase/firebase.utils'
+import { InputBase } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,36 +56,45 @@ const defaultOptions = [
 const NewActivity = () => {
   const classes = useStyles()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const test = project.value
-    const newActivity = { activity, test, startDate, endDate }
-    alert(JSON.stringify(newActivity, null, 2))
-
-    firestore.collection('activities').add({
-      activity: activity,
-      project: project.value,
-      startDate: startDate,
-      endDate: endDate
-    })
-  }
-
-  const [activity, setActivity] = useState('')
-  const [startDate, handleStartDateChange] = useState(new Date())
-  const [endDate, handleEndDateChange] = useState(new Date())
   const [isLoading, setLoading] = useState(false)
   const [options, setOptions] = useState(defaultOptions)
-  const [project, setProject] = useState(undefined)
+
+  const validationSchema = yup.object({
+    activity: yup.string().required('A actitity name is required')
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      activity: '',
+      project: undefined,
+      startDate: new Date(),
+      endDate: new Date(),
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+
+      /*     firestore.collection('activities').add({
+          activity: activity,
+          project: project.value,
+          startDate: startDate,
+          endDate: endDate
+        }) */
+    }
+  });
 
   return (
-    <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
-      <InputBase
+    <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
+      <TextField
+        id='activity'
+        autoComplete='off'
         className={classes.input}
         placeholder="What are you doing?"
-        value={activity}
-        onChange={e => setActivity(e.target.value)}
-        inputProps={{ 'aria-label': 'activity input' }}
-        required
+        value={formik.values.activity}
+        onChange={formik.handleChange}
+        InputProps={{ disableUnderline: true }}
+        error = {formik.touched.activity && Boolean(formik.errors.activity)}
+        helperText={formik.touched.activity && formik.errors.activity}
         autoFocus
       />
       <ProjectSelect
@@ -92,14 +103,13 @@ const NewActivity = () => {
         setLoading={setLoading}
         options={options}
         setOptions={setOptions}
-        value={project}
-        setValue={setProject}
+        value={formik.values.project}
+        setFieldValue={formik.setFieldValue}
       />
       <TimeInput
-        startDate={startDate}
-        handleStartDateChange={handleStartDateChange}
-        endDate={endDate}
-        handleEndDateChange={handleEndDateChange}
+        startDate={formik.values.startDate}
+        setFieldValue={formik.setFieldValue}
+        endDate={formik.values.endDate}
       />
       <IconButton color='secondary' type='submit'>
         <DoneIcon />
