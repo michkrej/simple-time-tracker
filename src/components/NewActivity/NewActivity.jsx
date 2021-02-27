@@ -68,14 +68,14 @@ const NewActivity = ({ currentUser, setCurrentUser }) => {
       endDate: new Date()
     },
     validationSchema: validationSchema,
-    onSubmit: ({ activity, project, startDate, endDate }, values) => {
+    onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
 
       firestore.collection('activities').add({
-        activity: activity,
-        project: project.value,
-        startDate: startDate,
-        endDate: endDate
+        activity: values.activity,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        project_id: values.project.id
       })
     }
   });
@@ -101,8 +101,9 @@ const NewActivity = ({ currentUser, setCurrentUser }) => {
       firestore.collection('projects').where('user_id', '==', `${currentUser.id}`).get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            console.log(doc.data());
-            result.push(doc.data())
+            const value = doc.data()
+            value.id = doc.id
+            result.push(value)
           });
         })
         .then(() => setProjects(result))
