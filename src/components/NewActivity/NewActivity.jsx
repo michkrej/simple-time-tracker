@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import { firestore } from '../../firebase/firebase.utils'
 import { InputBase } from '@material-ui/core'
 import { connect } from 'react-redux'
+import { setCurrentUser } from '../../redux/user/user.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,17 +49,12 @@ export const createOption = (label) => ({
   value: label.toLowerCase().replace(/\W/g, '')
 })
 
-const defaultOptions = [
-  createOption('TDDD96'),
-  createOption('TDDD60'),
-  createOption('TSRT12')
-]
 
-const NewActivity = ({ currentUser }) => {
+const NewActivity = ({ currentUser, setCurrentUser }) => {
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
-  const [options, setOptions] = useState(defaultOptions)
+  const [projects, setProjects] = useState([])
 
   const validationSchema = yup.object({
     activity: yup.string().required('A actitity name is required')
@@ -69,7 +65,7 @@ const NewActivity = ({ currentUser }) => {
       activity: '',
       project: undefined,
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: new Date()
     },
     validationSchema: validationSchema,
     onSubmit: ({ activity, project, startDate, endDate }, values) => {
@@ -83,22 +79,41 @@ const NewActivity = ({ currentUser }) => {
       })
     }
   });
-  console.log(currentUser)
 
   const handleCreate = (inputValue) => {
     setLoading(true)
     setTimeout(() => {
       const newOption = createOption(inputValue)
       firestore.collection('projects').add({
-        project_name: newOption.value,
+        label: newOption.label,
+        value: newOption.value,
         user_id: currentUser.id
       })
       setLoading(false)
-      setOptions([...options, newOption])
+      setProjects([...projects, newOption])
       formik.setFieldValue('project', newOption)
     }, 500)
   }
 
+  const fetchProjects = async () => {
+    if (currentUser) {
+      const result = []
+      firestore.collection('projects').where('user_id', '==', `${currentUser.id}`).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            console.log(doc.data());
+            result.push(doc.data())
+          });
+        })
+        .then(() => setProjects(result))
+    }
+  }
+
+  useEffect(() => {
+    fetchProjects()
+  }, [currentUser])
+
+  console.log(projects)
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
       <TextField
@@ -116,7 +131,7 @@ const NewActivity = ({ currentUser }) => {
       <ProjectSelect
         className={classes.select}
         isLoading={isLoading}
-        options={options}
+        options={projects}
         value={formik.values.project}
         handleCreate={handleCreate}
         setFieldValue={formik.setFieldValue}
@@ -137,4 +152,8 @@ const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser
 })
 
-export default connect(mapStateToProps)(NewActivity)
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewActivity)

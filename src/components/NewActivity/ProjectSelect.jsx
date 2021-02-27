@@ -6,7 +6,7 @@ import { theme as MuiTheme } from '../../index'
 const ProjectSelect = ({ isLoading, options, value, setFieldValue, handleCreate }) => {
   const [input, setInput] = useState('')
 
-  const width = value ? `${value.label.length * 8 + 100}px` : '12rem'
+  const width = value ? `${value.label.length * 9 + 100}px` : '12rem'
   return (
     <div style={{ width: width, padding: MuiTheme.spacing(1) }}>
       <CreatableSelect
