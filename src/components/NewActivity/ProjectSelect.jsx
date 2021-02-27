@@ -2,27 +2,21 @@
 import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 import { theme as MuiTheme } from '../../index'
-import { createOption } from './NewActivity'
 
-const ProjectSelect = ({ isLoading, setLoading, options, setOptions, value, setFieldValue }) => {
-  const handleCreate = (inputValue) => {
-    setLoading(true)
-    setTimeout(() => {
-      const newOption = createOption(inputValue)
-      setLoading(false)
-      setOptions([...options, newOption])
-      setFieldValue('project', newOption)
-    }, 500)
-  }
+const ProjectSelect = ({ isLoading, options, value, setFieldValue, handleCreate }) => {
+  const [input, setInput] = useState('')
 
+  const width = value ? `${value.label.length * 8 + 100}px` : '12rem'
   return (
-    <div style={{ minWidth: '10rem', padding: MuiTheme.spacing(1) }}>
+    <div style={{ width: width, padding: MuiTheme.spacing(1) }}>
       <CreatableSelect
         isClearable
         isDisabled={isLoading}
         isLoading={isLoading}
+        onInputChange={value => setInput(value)}
         onChange={value => setFieldValue('project', value)}
         onCreateOption={handleCreate}
+        formatCreateLabel={() => `+ Add new project: ${input}`}
         options={options}
         value={value}
         theme={theme => ({

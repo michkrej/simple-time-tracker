@@ -10,6 +10,7 @@ import * as yup from 'yup';
 
 import { firestore } from '../../firebase/firebase.utils'
 import { InputBase } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +54,7 @@ const defaultOptions = [
   createOption('TSRT12')
 ]
 
-const NewActivity = () => {
+const NewActivity = ({ currentUser }) => {
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
@@ -71,17 +72,32 @@ const NewActivity = () => {
       endDate: new Date(),
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: ({ activity, project, startDate, endDate }, values) => {
       alert(JSON.stringify(values, null, 2));
 
-      /*     firestore.collection('activities').add({
-          activity: activity,
-          project: project.value,
-          startDate: startDate,
-          endDate: endDate
-        }) */
+      firestore.collection('activities').add({
+        activity: activity,
+        project: project.value,
+        startDate: startDate,
+        endDate: endDate
+      })
     }
   });
+  console.log(currentUser)
+
+  const handleCreate = (inputValue) => {
+    setLoading(true)
+    setTimeout(() => {
+      const newOption = createOption(inputValue)
+      firestore.collection('projects').add({
+        project_name: newOption.value,
+        user_id: currentUser.id
+      })
+      setLoading(false)
+      setOptions([...options, newOption])
+      formik.setFieldValue('project', newOption)
+    }, 500)
+  }
 
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
@@ -93,17 +109,16 @@ const NewActivity = () => {
         value={formik.values.activity}
         onChange={formik.handleChange}
         InputProps={{ disableUnderline: true }}
-        error = {formik.touched.activity && Boolean(formik.errors.activity)}
+        error={formik.touched.activity && Boolean(formik.errors.activity)}
         helperText={formik.touched.activity && formik.errors.activity}
         autoFocus
       />
       <ProjectSelect
         className={classes.select}
         isLoading={isLoading}
-        setLoading={setLoading}
         options={options}
-        setOptions={setOptions}
         value={formik.values.project}
+        handleCreate={handleCreate}
         setFieldValue={formik.setFieldValue}
       />
       <TimeInput
@@ -118,4 +133,8 @@ const NewActivity = () => {
   )
 }
 
-export default NewActivity
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+export default connect(mapStateToProps)(NewActivity)

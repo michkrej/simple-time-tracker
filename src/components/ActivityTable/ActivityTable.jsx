@@ -4,7 +4,7 @@ import { DataGrid } from '@material-ui/data-grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '90vh',
+    height: '80vh',
     width: '100%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
