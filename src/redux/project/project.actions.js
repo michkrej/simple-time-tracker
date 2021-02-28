@@ -35,7 +35,6 @@ export const getProjects = (uid) => {
           if (a.value > b.value) return 1
           return 0
         })
-        console.log(result)
         dispatch(getProjectsSuccess(sortedResult))
       })
       .catch((err) => dispatch(getProjectsFailure(err)))

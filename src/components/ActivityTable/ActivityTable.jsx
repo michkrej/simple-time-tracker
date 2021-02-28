@@ -10,13 +10,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { addNewActivity, getActivities } from '../../redux/activity/activity.actions'
 import { getProjects } from '../../redux/project/project.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '80vh',
+    height: '100%',
     width: '100%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
@@ -46,60 +47,78 @@ const columns = [
     } */
 ];
 
-/* const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 }
-] */
-
-const test = [
-  { id: '123', activity: 'Testing', startDate: 1614455727 }
-]
-
 const ActivityTable = ({ projects, getActivities, activities, loading }) => {
   const classes = useStyles()
+  console.log(activities)
 
-  const [test, setTest] = useState(false)
   useEffect(() => {
     if (projects.length > 0) {
       getActivities(projects)
-      setTest(true)
     }
   }, [projects, getActivities])
 
-  // eslint-disable-next-line no-unused-expressions
-  !loading ? console.log(activities) : ''
+  const getTimespanFormat = (start, end) => {
+    if (start instanceof Date || end instanceof Date) {
+      return `${moment(start).format('HH:mm')} - ${moment(end).format('HH:mm')}`
+    }
+    const startTime = moment(start.toDate()).format('HH:mm')
+    const endTime = moment(end.toDate()).format('HH:mm')
+    return `${startTime} - ${endTime}`
+  }
 
-  console.log(loading)
-  const table = (<Table>
-    <TableHead>
-      <TableRow>
-        <TableCell>Activity</TableCell>
-        <TableCell>Project</TableCell>
-        <TableCell>Start</TableCell>
-        <TableCell>End</TableCell>
-        <TableCell>Length</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {
-        activities ? activities.map(row => (
-          // eslint-disable-next-line react/jsx-key
-          <TableRow key={row.id}>{row.activity}</TableRow>
-        )) : ''
-      }
-    </TableBody>
-  </Table>)
+  const getTimespan = (start, end) => {
+    if (start instanceof Date || end instanceof Date) {
+      return moment(moment(end).diff(moment(start))).format('HH:MM')
+    }
+    const startTime = moment(start.toDate());
+    const endTime = moment(end.toDate());
+    const diffTime = moment(endTime.diff(startTime)).format('HH:MM')
+    return diffTime
+  }
+
+  const getYear = (date) => {
+    if (date instanceof Date) {
+      return moment(date).format('Do MMM Y')
+    }
+    return moment(date.toDate()).format('Do MMM Y')
+  }
+
+  const sortedActivities = activities.sort((a, b) => {
+    if (a.startDate instanceof Date || b.startDate instanceof Date) {
+      return moment(a.startDate).isAfter(moment(b.startDate)) ? 1 : -1
+    }
+    const startTime = moment(a.startDate.toDate());
+    const endTime = moment(b.startDate.toDate());
+    return startTime.isAfter(endTime) ? 1 : -1
+  })
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper} component='div'>
-        <div key={test}>{loading ? 'Nothing here' : console.log(activities)}</div>
+        <Table style={{ width: '100%' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ minWidth: '12rem' }}>Activity</TableCell>
+              <TableCell>Project</TableCell>
+              <TableCell>Timespan</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Length</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              sortedActivities.map(row => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.activity}</TableCell>
+                  <TableCell>{projects.find(project => project.id === row.project_id).label}</TableCell>
+                  <TableCell>{getTimespanFormat(row.startDate, row.endDate)}</TableCell>
+                  <TableCell>{getYear(row.startDate)}</TableCell>
+                  <TableCell>{getTimespan(row.startDate, row.endDate)}</TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </Table>
       </Paper>
     </div>
   )

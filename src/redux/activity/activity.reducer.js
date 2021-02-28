@@ -2,7 +2,7 @@ import { ActivityActionTypes, GET_ACTIVITIES } from './activity.types'
 import { addActivity } from './activity.utils'
 
 const INITIAL_STATE = {
-  activities: undefined,
+  activities: [],
   loading: true,
   error: {}
 

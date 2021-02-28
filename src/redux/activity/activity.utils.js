@@ -1,3 +1,3 @@
 export const addActivity = (activities, activityToAdd) => {
-  return [...(activities || []), activityToAdd]
+  return [activityToAdd, ...activities]
 }

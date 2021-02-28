@@ -75,7 +75,7 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
         project_id: values.project.id
       })
 
-      addNewActivity({ activity: values.activity, startDate: values.startDate, endDate: values.endDate, projectId: values.project.id })
+      addNewActivity({ activity: values.activity, startDate: values.startDate, endDate: values.endDate, project_id: values.project.id })
     }
   });
 

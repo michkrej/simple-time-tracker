@@ -29,15 +29,18 @@ export const getActivities = (projects) => {
     const projectIDs = projects.map(project => {
       return project.id
     })
-    firestore.collection('activities').where('project_id', 'in', projectIDs).get()
+
+    const activityRef = await firestore.collection('activities').where('project_id', 'in', projectIDs)
+
+    activityRef.get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const value = doc.data()
           value.id = doc.id
           activities.push(value)
         });
+        dispatch(getActivitiesSuccess(activities))
       })
-      .then(dispatch(getActivitiesSuccess(activities)))
       .catch(err => dispatch(getActivitiesFailure(err)))
   }
 }
