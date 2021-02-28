@@ -55,7 +55,6 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
-  const [test, setTest] = useState(projects)
 
   const validationSchema = yup.object({
     activity: yup.string().required('A actitity name is required')
@@ -116,7 +115,7 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
     if (currentUser) {
       getProjects(currentUser.id)
     }
-  }, [currentUser])
+  }, [currentUser, getProjects])
 
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>

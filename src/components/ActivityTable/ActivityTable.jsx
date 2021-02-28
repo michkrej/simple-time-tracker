@@ -40,14 +40,14 @@ const columns = [
   { field: 'duration', headerName: 'Duration', width: 110 },
 ];
 
-const ActivityTable = ({ projects, getActivities, activities, loading }) => {
+const ActivityTable = ({ projects, getActivities, activities, loading, currentUser }) => {
   const classes = useStyles()
 
   useEffect(() => {
     if (projects.length > 0) {
       getActivities(projects)
     }
-  }, [])
+  }, [projects])
 
   const getTimespanFormat = (start, end) => {
     if (start instanceof Date || end instanceof Date) {
@@ -61,12 +61,12 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
   // TODO: Handle events spanning several days
   const getDuration = (start, end) => {
     if (start instanceof Date || end instanceof Date) {
-      return moment(moment(end).diff(moment(start))).format('HH:MM')
+      return moment.utc(moment(end).diff(moment(start))).format('HH:mm')
     }
     const startTime = moment(start.toDate());
     const endTime = moment(end.toDate());
-    const diffTime = moment(endTime.diff(startTime)).format('HH:MM')
-    return diffTime
+    const diff = endTime.diff(startTime)
+    return moment.utc(diff).format('HH:mm')
   }
 
   const getYear = (date) => {
