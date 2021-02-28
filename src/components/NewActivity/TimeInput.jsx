@@ -42,6 +42,7 @@ const TimeInput = ({ startDate, setFieldValue, endDate }) => {
     return date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth()
   }
 
+  // TODO: Use normal inputs and parse it to Date objects
   return (
     <div className={classes.root}>
       <KeyboardDateTimePicker

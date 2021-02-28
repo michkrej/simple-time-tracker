@@ -56,6 +56,7 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
     return `${startTime} - ${endTime}`
   }
 
+  // TODO: Handle events spanning several days
   const getDuration = (start, end) => {
     if (start instanceof Date || end instanceof Date) {
       return moment(moment(end).diff(moment(start))).format('HH:MM')
