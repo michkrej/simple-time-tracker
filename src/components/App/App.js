@@ -7,10 +7,11 @@ import { setCurrentUser } from '../../redux/user/user.actions'
 import { connect } from 'react-redux'
 import { CssBaseline } from '@material-ui/core'
 
+// TODO : Fetch all activities and projects when the user logs in
 function App (props) {
   useEffect(() => {
     const { setCurrentUser } = props
-    // no need for ref here
+
     const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth)

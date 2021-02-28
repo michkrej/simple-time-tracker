@@ -1,7 +1,8 @@
 import { ActivityActionTypes } from './activity.types'
+import { addActivity } from './activity.utils'
 
 const INITIAL_STATE = {
-  newActivity: null
+  activities: []
 }
 
 const activityReducer = (state = INITIAL_STATE, action) => {
@@ -9,7 +10,7 @@ const activityReducer = (state = INITIAL_STATE, action) => {
     case ActivityActionTypes.ADD_ACTIVITY:
       return {
         ...state,
-        newActivity: action.payload
+        activities: addActivity(state.activities, action.payload)
       }
     default:
       return state

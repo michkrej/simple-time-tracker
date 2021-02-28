@@ -9,9 +9,10 @@ import { TimeInput, ProjectSelect } from '../index'
 import * as yup from 'yup';
 
 import { firestore } from '../../firebase/firebase.utils'
-import { InputBase } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { setCurrentUser } from '../../redux/user/user.actions'
+import { addNewActivity } from '../../redux/activity/activity.actions'
+import { getProjects } from '../../redux/project/project.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,13 +50,10 @@ export const createOption = (label) => ({
   value: label.toLowerCase().replace(/\W/g, '')
 })
 
-
-const NewActivity = ({ currentUser, setCurrentUser }) => {
+const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, projects }) => {
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
-  const [projects, setProjects] = useState([])
-
   const validationSchema = yup.object({
     activity: yup.string().required('A actitity name is required')
   })
@@ -77,6 +75,8 @@ const NewActivity = ({ currentUser, setCurrentUser }) => {
         endDate: values.endDate,
         project_id: values.project.id
       })
+
+      addNewActivity({ activity: values.activity, startDate: values.startDate, endDate: values.endDate, projectId: values.project.id })
     }
   });
 
@@ -90,31 +90,32 @@ const NewActivity = ({ currentUser, setCurrentUser }) => {
         user_id: currentUser.id
       })
       setLoading(false)
-      setProjects([...projects, newOption])
+      projects = [...projects, newOption]
       formik.setFieldValue('project', newOption)
     }, 500)
   }
 
-  const fetchProjects = async () => {
-    if (currentUser) {
-      const result = []
-      firestore.collection('projects').where('user_id', '==', `${currentUser.id}`).get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const value = doc.data()
-            value.id = doc.id
-            result.push(value)
-          });
-        })
-        .then(() => setProjects(result))
+  const fetchActivities = async () => {
+    console.log('Fetch activities')
+    console.log(currentUser, projects)
+    if (currentUser && projects.length > 0) {
+      console.log(projects)
+      const projectIDs = projects.map(project => project.id)
+      console.log(projectIDs)
     }
   }
 
-  useEffect(() => {
-    fetchProjects()
-  }, [currentUser])
+  /*   useEffect(() => {
+      fetchProjects()
+      fetchActivities()
+    }, [currentUser]) */
 
-  console.log(projects)
+  useEffect(() => {
+    if (currentUser) {
+      getProjects(currentUser.id)
+    }
+  }, [getProjects, currentUser])
+
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
       <TextField
@@ -149,12 +150,15 @@ const NewActivity = ({ currentUser, setCurrentUser }) => {
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+const mapStateToProps = ({ user, activities, projects }) => ({
+  currentUser: user.currentUser,
+  activities: activities,
+  projects: projects.projects
 })
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+const mapDispatchToProps = (dispatch) => ({
+  addNewActivity: activity => dispatch(addNewActivity(activity)),
+  getProjects: (uid) => dispatch(getProjects(uid))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewActivity)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, makeStyles } from '@material-ui/core'
 import { DataGrid } from '@material-ui/data-grid';
 
@@ -51,6 +51,8 @@ const rows = [
 ]
 
 const ActivityTable = () => {
+  useEffect(() => {
+  }, [])
   const classes = useStyles()
   return (
     <div className={classes.root}>
