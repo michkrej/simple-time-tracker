@@ -10,8 +10,7 @@ import * as yup from 'yup';
 
 import { firestore } from '../../firebase/firebase.utils'
 import { connect } from 'react-redux'
-import { setCurrentUser } from '../../redux/user/user.actions'
-import { addNewActivity } from '../../redux/activity/activity.actions'
+import { addNewActivity, getActivities } from '../../redux/activity/activity.actions'
 import { getProjects } from '../../redux/project/project.actions'
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +49,7 @@ export const createOption = (label) => ({
   value: label.toLowerCase().replace(/\W/g, '')
 })
 
-const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, projects }) => {
+const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, projects, getActivities }) => {
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
@@ -95,26 +94,17 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
     }, 500)
   }
 
-  const fetchActivities = async () => {
-    console.log('Fetch activities')
-    console.log(currentUser, projects)
-    if (currentUser && projects.length > 0) {
-      console.log(projects)
-      const projectIDs = projects.map(project => project.id)
-      console.log(projectIDs)
-    }
-  }
-
-  /*   useEffect(() => {
-      fetchProjects()
-      fetchActivities()
-    }, [currentUser]) */
-
   useEffect(() => {
     if (currentUser) {
       getProjects(currentUser.id)
     }
-  }, [getProjects, currentUser])
+  }, [currentUser])
+
+  useEffect(() => {
+    if (projects.length > 0) {
+      getActivities(projects)
+    }
+  }, [projects])
 
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
@@ -158,6 +148,7 @@ const mapStateToProps = ({ user, activities, projects }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addNewActivity: activity => dispatch(addNewActivity(activity)),
+  getActivities: (projects) => dispatch(getActivities(projects)),
   getProjects: (uid) => dispatch(getProjects(uid))
 })
 

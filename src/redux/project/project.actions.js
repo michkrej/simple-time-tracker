@@ -1,19 +1,19 @@
-import { ProjectActionTypes } from './project.types'
+import { GET_PROJECTS } from './project.types'
 import { firestore } from '../../firebase/firebase.utils'
 
 export const getProjectsBegin = () => ({
-  type: ProjectActionTypes.GET_PROJECTS_BEGIN,
+  type: GET_PROJECTS.BEGIN,
   payload: []
 })
 
 export const getProjectsSuccess = projects => ({
-  type: ProjectActionTypes.GET_PROJECTS_SUCCESS,
+  type: GET_PROJECTS.SUCCESS,
   payload: projects,
   error: null
 })
 
 export const getProjectsFailure = (err) => ({
-  type: ProjectActionTypes.GET_PROJECTS_FAILURE,
+  type: GET_PROJECTS.FAILURE,
   payload: err
 })
 

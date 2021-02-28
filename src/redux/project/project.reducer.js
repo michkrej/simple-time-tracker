@@ -1,5 +1,4 @@
-import { ProjectActionTypes } from './project.types'
-import { getProjects } from './project.utils'
+import { GET_PROJECTS } from './project.types'
 
 const INITIAL_STATE = {
   projects: []
@@ -7,16 +6,16 @@ const INITIAL_STATE = {
 
 const projectReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ProjectActionTypes.GET_PROJECTS_BEGIN:
+    case GET_PROJECTS.BEGIN:
       return {
         ...state
       }
-    case ProjectActionTypes.GET_PROJECTS_SUCCESS:
+    case GET_PROJECTS.SUCCESS:
       return {
         ...state,
         projects: action.payload
       }
-    case ProjectActionTypes.GET_PROJECTS_FAILURE:
+    case GET_PROJECTS.FAILURE:
       return {
         ...state,
         error: action.payload.error

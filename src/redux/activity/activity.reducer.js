@@ -1,4 +1,4 @@
-import { ActivityActionTypes } from './activity.types'
+import { ActivityActionTypes, GET_ACTIVITIES } from './activity.types'
 import { addActivity } from './activity.utils'
 
 const INITIAL_STATE = {
@@ -11,6 +11,20 @@ const activityReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         activities: addActivity(state.activities, action.payload)
+      }
+    case GET_ACTIVITIES.BEGIN:
+      return {
+        ...state
+      }
+    case GET_ACTIVITIES.SUCCESS:
+      return {
+        ...state,
+        activities: action.payload
+      }
+    case GET_ACTIVITIES.FAILURE:
+      return {
+        ...state,
+        error: action.payload.error
       }
     default:
       return state
