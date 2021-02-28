@@ -40,7 +40,6 @@ const columns = [
 
 const ActivityTable = ({ projects, getActivities, activities, loading }) => {
   const classes = useStyles()
-  console.log(activities)
 
   useEffect(() => {
     if (projects.length > 0) {
