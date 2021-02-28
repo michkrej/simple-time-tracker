@@ -100,12 +100,6 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
     }
   }, [currentUser])
 
-  useEffect(() => {
-    if (projects.length > 0) {
-      getActivities(projects)
-    }
-  }, [projects])
-
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
       <TextField

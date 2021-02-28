@@ -2,7 +2,10 @@ import { ActivityActionTypes, GET_ACTIVITIES } from './activity.types'
 import { addActivity } from './activity.utils'
 
 const INITIAL_STATE = {
-  activities: []
+  activities: undefined,
+  loading: true,
+  error: {}
+
 }
 
 const activityReducer = (state = INITIAL_STATE, action) => {
@@ -14,17 +17,20 @@ const activityReducer = (state = INITIAL_STATE, action) => {
       }
     case GET_ACTIVITIES.BEGIN:
       return {
-        ...state
+        ...state,
+        loading: true
       }
     case GET_ACTIVITIES.SUCCESS:
       return {
         ...state,
-        activities: action.payload
+        activities: action.payload,
+        loading: false,
       }
     case GET_ACTIVITIES.FAILURE:
       return {
         ...state,
-        error: action.payload.error
+        error: action.payload.error,
+        loading: false
       }
     default:
       return state

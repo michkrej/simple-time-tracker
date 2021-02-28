@@ -29,7 +29,6 @@ export const getActivities = (projects) => {
     const projectIDs = projects.map(project => {
       return project.id
     })
-    console.log(`${projectIDs}`)
     firestore.collection('activities').where('project_id', 'in', projectIDs).get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
