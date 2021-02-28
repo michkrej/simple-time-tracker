@@ -17,7 +17,7 @@ import { getProjects } from '../../redux/project/project.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
+    height: '90vh',
     width: '100%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
@@ -33,18 +33,9 @@ const useStyles = makeStyles((theme) => ({
 const columns = [
   { field: 'activity', headerName: 'Activity', width: 200 },
   { field: 'project', headerName: 'Project', width: 130 },
-  { field: 'startDate', headerName: 'Start Time', width: 130 },
-  { field: 'endDate', headerName: 'End Time', width: 130 },
-  // { field: 'length', headerName: 'Length', width: 130 },
-  /*   {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`
-    } */
+  { field: 'timespan', headerName: 'Timespan', width: 130 },
+  { field: 'date', headerName: 'Date', width: 130 },
+  { field: 'duration', headerName: 'Duration', width: 110 },
 ];
 
 const ActivityTable = ({ projects, getActivities, activities, loading }) => {
@@ -66,7 +57,7 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
     return `${startTime} - ${endTime}`
   }
 
-  const getTimespan = (start, end) => {
+  const getDuration = (start, end) => {
     if (start instanceof Date || end instanceof Date) {
       return moment(moment(end).diff(moment(start))).format('HH:MM')
     }
@@ -92,6 +83,16 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
     return startTime.isAfter(endTime) ? 1 : -1
   })
 
+  const rows = sortedActivities.map((entry) => {
+    return {
+      id: entry.id,
+      activity: entry.activity,
+      project: projects.find(project => project.id === entry.project_id).label,
+      timespan: getTimespanFormat(entry.startDate, entry.endDate),
+      date: getYear(entry.startDate),
+      duration: getDuration(entry.startDate, entry.endDate)
+    }
+  })
   return (
     <div className={classes.root}>
       <Paper className={classes.paper} component='div'>
@@ -113,12 +114,13 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
                   <TableCell>{projects.find(project => project.id === row.project_id).label}</TableCell>
                   <TableCell>{getTimespanFormat(row.startDate, row.endDate)}</TableCell>
                   <TableCell>{getYear(row.startDate)}</TableCell>
-                  <TableCell>{getTimespan(row.startDate, row.endDate)}</TableCell>
+                  <TableCell>{getDuration(row.startDate, row.endDate)}</TableCell>
                 </TableRow>
               ))
             }
           </TableBody>
         </Table>
+        {/* <DataGrid rows={rows} columns={columns} pageSize={20} /> */}
       </Paper>
     </div>
   )
