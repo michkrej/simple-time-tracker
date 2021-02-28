@@ -34,3 +34,7 @@ export const useAuthUser = (props) => {
 
   return currentUser // return authenticated user
 }
+
+export const generateID = () => {
+  return '_' + Math.random().toString(36).substr(2, 9);
+}

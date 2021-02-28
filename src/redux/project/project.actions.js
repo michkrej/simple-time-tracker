@@ -21,7 +21,8 @@ export const getProjects = (uid) => {
   return async dispatch => {
     dispatch(getProjectsBegin())
     const result = []
-    firestore.collection('projects').where('user_id', '==', `${uid}`).get()
+    const projectsRef = await firestore.collection('projects').where('user_id', '==', `${uid}`)
+    projectsRef.get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const value = doc.data()

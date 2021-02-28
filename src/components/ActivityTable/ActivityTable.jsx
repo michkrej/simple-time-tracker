@@ -17,8 +17,9 @@ import { getProjects } from '../../redux/project/project.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '90vh',
+    height: '85vh',
     width: '100%',
+
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
   },
@@ -26,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     height: '100%',
-    outline: 'none'
+    outline: 'none',
+    overflowY: 'auto',
   }
 }))
 
@@ -45,7 +47,7 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
     if (projects.length > 0) {
       getActivities(projects)
     }
-  }, [projects, getActivities])
+  }, [])
 
   const getTimespanFormat = (start, end) => {
     if (start instanceof Date || end instanceof Date) {
@@ -87,7 +89,7 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
     return {
       id: entry.id,
       activity: entry.activity,
-      project: projects.find(project => project.id === entry.project_id).label,
+      project: entry.project,
       timespan: getTimespanFormat(entry.startDate, entry.endDate),
       date: getYear(entry.startDate),
       duration: getDuration(entry.startDate, entry.endDate)
@@ -111,7 +113,7 @@ const ActivityTable = ({ projects, getActivities, activities, loading }) => {
               sortedActivities.map(row => (
                 <TableRow key={row.id}>
                   <TableCell>{row.activity}</TableCell>
-                  <TableCell>{projects.find(project => project.id === row.project_id).label}</TableCell>
+                  <TableCell>{row.project}</TableCell>
                   <TableCell>{getTimespanFormat(row.startDate, row.endDate)}</TableCell>
                   <TableCell>{getYear(row.startDate)}</TableCell>
                   <TableCell>{getDuration(row.startDate, row.endDate)}</TableCell>
