@@ -12,6 +12,7 @@ import { firestore } from '../../firebase/firebase.utils'
 import { connect } from 'react-redux'
 import { addNewActivity, getActivities } from '../../redux/activity/activity.actions'
 import { getProjects } from '../../redux/project/project.actions'
+import { generateID } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export const createOption = (label) => ({
+export const createOption = (label, id) => ({
+  id,
   label,
   value: label.toLowerCase().replace(/\W/g, '')
 })
@@ -53,6 +55,7 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
   const classes = useStyles()
 
   const [isLoading, setLoading] = useState(false)
+
   const validationSchema = yup.object({
     activity: yup.string().required('A actitity name is required')
   })
@@ -72,25 +75,39 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
         activity: values.activity,
         startDate: values.startDate,
         endDate: values.endDate,
-        project_id: values.project.id
+        project_id: values.project.id,
+        project: values.project.label
       })
 
-      addNewActivity({ activity: values.activity, startDate: values.startDate, endDate: values.endDate, project_id: values.project.id })
+      addNewActivity({
+        activity: values.activity,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        project_id: values.project.id,
+        project: values.project.label
+      })
     }
   });
 
   const handleCreate = (inputValue) => {
     setLoading(true)
     setTimeout(() => {
-      const newOption = createOption(inputValue)
-      firestore.collection('projects').add({
+      const id = generateID()
+      const newOption = createOption(inputValue, id)
+      firestore.collection('projects').doc(id).set({
         label: newOption.label,
         value: newOption.value,
         user_id: currentUser.id
       })
+        .then(() => {
+          getProjects(currentUser.id)
+          console.log(projects)
+          formik.setFieldValue('project', newOption)
+        })
+
+        .catch(err => console.log(err))
+      console.log(projects)
       setLoading(false)
-      projects = [...projects, newOption]
-      formik.setFieldValue('project', newOption)
     }, 500)
   }
 
@@ -98,7 +115,7 @@ const NewActivity = ({ currentUser, addNewActivity, activities, getProjects, pro
     if (currentUser) {
       getProjects(currentUser.id)
     }
-  }, [currentUser])
+  }, [currentUser, getProjects])
 
   return (
     <Paper component="form" className={classes.root} onSubmit={formik.handleSubmit}>
